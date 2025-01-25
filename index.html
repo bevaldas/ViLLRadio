@@ -24,7 +24,6 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             max-width: 800px;
             width: 95%;
-            overflow: auto;
         }
 
         h1 {
@@ -42,15 +41,6 @@
             line-height: 1.5;
         }
 
-        canvas {
-            display: block;
-            margin: 20px auto;
-            width: 100%;
-            height: 200px;
-            background: #111;
-            border-radius: 10px;
-        }
-
         .highlight {
             color: #1abc9c;
             font-weight: bold;
@@ -61,54 +51,25 @@
     <div id="radio-widget">
         <h1 id="station-title">Загрузка...</h1>
         <p id="current-song">Сейчас играет: <span class="highlight">Загрузка...</span></p>
-        <p id="next-song">Следующая: <span class="highlight">Загрузка...</span></p>
-        <p id="dj-name">Диджей: <span class="highlight">Загрузка...</span></p>
-        <p id="listeners">Слушатели: <span class="highlight">0</span></p>
-        <canvas id="visualizer"></canvas>
     </div>
 
     <script>
         const apiUrl = "https://myradio24.com/users/vill/status.json";
 
         async function fetchRadioData() {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-
-            document.getElementById("station-title").innerText = data.title || "Неизвестная станция";
-            document.getElementById("current-song").innerHTML = `Сейчас играет: <span class="highlight">${data.song || "Неизвестная песня"}</span>`;
-            document.getElementById("next-song").innerHTML = `Следующая: <span class="highlight">${data.nextsongs && data.nextsongs[0]?.song || "Неизвестная песня"}</span>`;
-            document.getElementById("dj-name").innerHTML = `Диджей: <span class="highlight">${data.djname || "Неизвестный диджей"}</span>`;
-            document.getElementById("listeners").innerHTML = `Слушатели: <span class="highlight">${data.listeners || 0}</span>`;
-        }
-
-        // Анимация визуализатора
-        const canvas = document.getElementById("visualizer");
-        const ctx = canvas.getContext("2d");
-
-        function drawVisualizer() {
-            const width = canvas.width;
-            const height = canvas.height;
-
-            ctx.clearRect(0, 0, width, height);
-
-            const bars = 30; // Количество столбцов
-            const barWidth = width / bars;
-
-            for (let i = 0; i < bars; i++) {
-                const barHeight = Math.random() * height;
-                ctx.fillStyle = `rgb(${50 + barHeight}, ${100 + i * 5}, ${200 - i * 5})`;
-                ctx.fillRect(i * barWidth, height - barHeight, barWidth - 2, barHeight);
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                document.getElementById("station-title").innerText = data.title || "Неизвестная станция";
+                document.getElementById("current-song").innerHTML = `Сейчас играет: <span class="highlight">${data.song || "Неизвестная песня"}</span>`;
+            } catch (error) {
+                document.getElementById("station-title").innerText = "Ошибка загрузки станции";
+                document.getElementById("current-song").innerHTML = "Сейчас играет: <span class='highlight'>Ошибка</span>";
             }
-
-            requestAnimationFrame(drawVisualizer);
         }
 
-        // Начальная загрузка и интервал для обновления данных
         fetchRadioData();
         setInterval(fetchRadioData, 15000);
-
-        // Запуск визуализатора
-        drawVisualizer();
     </script>
 </body>
 </html>

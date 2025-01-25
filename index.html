@@ -47,7 +47,9 @@
 </head>
 <body>
     <div id="radio-widget">
-        <h1 id="station-title">Загрузка...</h1>
+        <p id="dj-name">Диджей: <span class="highlight">Загрузка...</span></p>
+        <h1 id="station-title">Вill Radio</h1>
+        <p id="dj-name">Диджей: <span class="highlight">Загрузка...</span></p>Загрузка...</h1>
         <p id="current-song">Сейчас играет: <span class="highlight">Загрузка...</span></p>
     </div>
 
@@ -65,6 +67,7 @@
                 // Ensure the data structure is valid
                 document.getElementById("station-title").innerText = data.title || "Неизвестная станция";
                 document.getElementById("current-song").innerHTML = `Сейчас играет: <span class="highlight">${data.song || "Неизвестная песня"}</span>`;
+                document.getElementById("dj-name").innerHTML = `Диджей: <span class="highlight">${data.djname || "Неизвестный диджей"}</span>`;
             } catch (error) {
                 console.error("Ошибка загрузки данных:", error);
                 document.getElementById("station-title").innerText = "Ошибка загрузки станции";

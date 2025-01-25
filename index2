@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyRadio24 Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #radio-widget {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        canvas {
+            display: block;
+            margin: 10px auto;
+            width: 100%;
+            height: 50px;
+            background: black;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="radio-widget">
+        <h1 id="station-title">Demo Radio Station</h1>
+        <p id="current-song">Now Playing: Demo Song</p>
+        <p id="artist">Artist: Demo Artist</p>
+        <p id="listeners">Listeners: 123</p>
+        <canvas id="visualizer"></canvas>
+    </div>
+
+    <script>
+        // Static demo data for display
+        const demoData = {
+            title: "Demo Radio Station",
+            song: "Demo Song",
+            artist: "Demo Artist",
+            listeners: 123
+        };
+
+        function loadDemoData() {
+            document.getElementById("station-title").innerText = demoData.title;
+            document.getElementById("current-song").innerText = `Now Playing: ${demoData.song}`;
+            document.getElementById("artist").innerText = `Artist: ${demoData.artist}`;
+            document.getElementById("listeners").innerText = `Listeners: ${demoData.listeners}`;
+        }
+
+        // Visualizer animation
+        const canvas = document.getElementById("visualizer");
+        const ctx = canvas.getContext("2d");
+
+        function drawVisualizer() {
+            const width = canvas.width;
+            const height = canvas.height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            const bars = 30; // Number of bars
+            const barWidth = width / bars;
+
+            for (let i = 0; i < bars; i++) {
+                const barHeight = Math.random() * height;
+                ctx.fillStyle = `rgb(${50 + barHeight}, ${100 + i * 5}, ${200 - i * 5})`;
+                ctx.fillRect(i * barWidth, height - barHeight, barWidth - 2, barHeight);
+            }
+
+            requestAnimationFrame(drawVisualizer);
+        }
+
+        loadDemoData();
+        drawVisualizer();
+    </script>
+</body>
+</html>

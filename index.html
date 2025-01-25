@@ -70,7 +70,11 @@
                 document.getElementById("current-song").innerHTML = `Сейчас играет: <span class="highlight">${data.song || "Неизвестная песня"}</span>`;
                 document.getElementById("dj-name").innerHTML = `Диджей: <span class="highlight">${data.djname || "Неизвестный диджей"}</span>`;
                 document.getElementById("listeners").innerHTML = `Слушатели: <span class="highlight">${data.listeners || "0"}</span>`;
-                document.getElementById("next-song").innerHTML = `Следующая: <span class="highlight">${data.nextsongs?.[0]?.song || "Нет данных"}</span>`;
+                if (data.nextsongs && Array.isArray(data.nextsongs) && data.nextsongs.length > 0) {
+                    document.getElementById("next-song").innerHTML = `Следующая: <span class="highlight">${data.nextsongs[0].song || "Нет данных"}</span>`;
+                } else {
+                    document.getElementById("next-song").innerHTML = `Следующая: <span class="highlight">Нет данных</span>`;
+                }
             } catch (error) {
                 console.error("Ошибка загрузки данных:", error);
                 document.getElementById("station-title").innerText = "Ошибка загрузки станции";

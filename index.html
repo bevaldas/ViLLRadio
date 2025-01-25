@@ -45,15 +45,6 @@
             line-height: 1.5;
         }
 
-        canvas {
-            display: block;
-            margin: 20px auto;
-            width: 100%;
-            height: 200px;
-            background: #111;
-            border-radius: 10px;
-        }
-
         .highlight {
             color: #1abc9c;
             font-weight: bold;
@@ -67,7 +58,6 @@
         <p id="next-song">Следующая: <span class="highlight">Загрузка...</span></p>
         <p id="dj-name">Диджей: <span class="highlight">Загрузка...</span></p>
         <p id="listeners">Слушатели: <span class="highlight">0</span></p>
-        <canvas id="visualizer"></canvas>
     </div>
 
     <script>
@@ -76,66 +66,25 @@
         async function fetchRadioData() {
             try {
                 const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    console.error(`HTTP ошибка! Статус: ${response.status}`);
-                    displayError();
-                    return;
-                }
+                if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+
                 const data = await response.json();
-
-                if (!data || typeof data !== 'object') {
-                    console.error('Получены некорректные данные');
-                    displayError();
-                    return;
-                }
-
                 document.getElementById("station-title").innerText = data.title || "Неизвестная станция";
                 document.getElementById("current-song").innerHTML = `Сейчас играет: <span class="highlight">${data.song || "Неизвестная песня"}</span>`;
                 document.getElementById("next-song").innerHTML = `Следующая: <span class="highlight">${data.nextsongs && data.nextsongs[0]?.song || "Неизвестная песня"}</span>`;
                 document.getElementById("dj-name").innerHTML = `Диджей: <span class="highlight">${data.djname || "Неизвестный диджей"}</span>`;
                 document.getElementById("listeners").innerHTML = `Слушатели: <span class="highlight">${data.listeners || 0}</span>`;
             } catch (error) {
-                console.error("Ошибка загрузки данных:", error);
-                displayError();
+                document.getElementById("station-title").innerText = "Ошибка загрузки станции";
+                document.getElementById("current-song").innerHTML = "Сейчас играет: <span class='highlight'>Ошибка</span>";
+                document.getElementById("next-song").innerHTML = "Следующая: <span class='highlight'>Ошибка</span>";
+                document.getElementById("dj-name").innerHTML = "Диджей: <span class='highlight'>Ошибка</span>";
+                document.getElementById("listeners").innerHTML = "Слушатели: <span class='highlight'>0</span>";
             }
         }
 
-        function displayError() {
-            document.getElementById("station-title").innerText = "Ошибка загрузки станции";
-            document.getElementById("current-song").innerHTML = "Сейчас играет: <span class='highlight'>Ошибка</span>";
-            document.getElementById("next-song").innerHTML = "Следующая: <span class='highlight'>Ошибка</span>";
-            document.getElementById("dj-name").innerHTML = "Диджей: <span class='highlight'>Ошибка</span>";
-            document.getElementById("listeners").innerHTML = "Слушатели: <span class='highlight'>0</span>";
-        }
-
-        // Анимация визуализатора
-        const canvas = document.getElementById("visualizer");
-        const ctx = canvas.getContext("2d");
-
-        function drawVisualizer() {
-            const width = canvas.width;
-            const height = canvas.height;
-
-            ctx.clearRect(0, 0, width, height);
-
-            const bars = 30; // Количество столбцов
-            const barWidth = width / bars;
-
-            for (let i = 0; i < bars; i++) {
-                const barHeight = Math.random() * height;
-                ctx.fillStyle = `rgb(${50 + barHeight}, ${100 + i * 5}, ${200 - i * 5})`;
-                ctx.fillRect(i * barWidth, height - barHeight, barWidth - 2, barHeight);
-            }
-
-            requestAnimationFrame(drawVisualizer);
-        }
-
-        // Начальная загрузка и интервал для обновления данных
         fetchRadioData();
         setInterval(fetchRadioData, 15000);
-
-        // Запуск визуализатора
-        drawVisualizer();
     </script>
 </body>
 </html>

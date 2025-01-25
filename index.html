@@ -47,10 +47,10 @@
 </head>
 <body>
     <div id="radio-widget">
-        <p id="dj-name">Диджей: <span class="highlight">Загрузка...</span></p>
         <h1 id="station-title">Загрузка...</h1>
-        <p id="listeners">Слушатели: <span class="highlight">Загрузка...</span></p>
+        <p id="dj-name">Диджей: <span class="highlight">Загрузка...</span></p>
         <p id="current-song">Сейчас играет: <span class="highlight">Загрузка...</span></p>
+        <p id="listeners">Слушатели: <span class="highlight">Загрузка...</span></p>
     </div>
 
     <script>
@@ -64,7 +64,7 @@
                 }
                 const data = await response.json();
 
-                // Ensure the data structure is valid
+                // Update the HTML with valid data
                 document.getElementById("station-title").innerText = data.title || "Неизвестная станция";
                 document.getElementById("current-song").innerHTML = `Сейчас играет: <span class="highlight">${data.song || "Неизвестная песня"}</span>`;
                 document.getElementById("dj-name").innerHTML = `Диджей: <span class="highlight">${data.djname || "Неизвестный диджей"}</span>`;
@@ -73,6 +73,8 @@
                 console.error("Ошибка загрузки данных:", error);
                 document.getElementById("station-title").innerText = "Ошибка загрузки станции";
                 document.getElementById("current-song").innerHTML = "Сейчас играет: <span class='highlight'>Ошибка</span>";
+                document.getElementById("dj-name").innerHTML = "Диджей: <span class='highlight'>Ошибка</span>";
+                document.getElementById("listeners").innerHTML = "Слушатели: <span class='highlight'>0</span>";
             }
         }
 
